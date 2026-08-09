@@ -32,14 +32,22 @@ const now = new Date("2026-08-09T12:00:00Z");
 assert(isCheckDue(new Date("2026-08-09T00:00:00Z"), now) === false, "12h-old check is not due (24h TTL)");
 assert(isCheckDue(new Date("2026-08-08T00:00:00Z"), now) === true, "36h-old check is due");
 
-const s1 = nextEvidenceStatus(null, { reachable: false, contentMatches: null }, now);
+const s1 = nextEvidenceStatus(null, { reachable: false, contentMatches: null, archiveReachable: null }, now);
 assert(s1.status === "unverified" && s1.consecutiveFailures === 1, "1st failure does not flip status");
-const s2 = nextEvidenceStatus(s1, { reachable: false, contentMatches: null }, now);
-assert(s2.status === "unreachable" && s2.consecutiveFailures === 2, "2nd consecutive failure flips to unreachable");
-const s3 = nextEvidenceStatus(s2, { reachable: true, contentMatches: true }, now);
+const s2 = nextEvidenceStatus(s1, { reachable: false, contentMatches: null, archiveReachable: null }, now);
+assert(s2.status === "unreachable" && s2.consecutiveFailures === 2, "2nd consecutive failure with no archive flips to unreachable");
+const s3 = nextEvidenceStatus(s2, { reachable: true, contentMatches: true, archiveReachable: null }, now);
 assert(s3.status === "live" && s3.consecutiveFailures === 0, "a success resets to live and clears the counter");
-const s4 = nextEvidenceStatus(null, { reachable: true, contentMatches: false }, now);
-const s5 = nextEvidenceStatus(s4, { reachable: true, contentMatches: false }, now);
-assert(s5.status === "drifted", "2 consecutive hash-mismatches flips to drifted, not unreachable");
+const s4 = nextEvidenceStatus(null, { reachable: true, contentMatches: false, archiveReachable: null }, now);
+const s5 = nextEvidenceStatus(s4, { reachable: true, contentMatches: false, archiveReachable: true }, now);
+assert(s5.status === "drifted", "2 consecutive hash-mismatches flips to drifted, not archived, even with a reachable archive");
+
+const a1 = nextEvidenceStatus(null, { reachable: false, contentMatches: null, archiveReachable: true }, now);
+assert(
+  a1.status === "unverified" && a1.consecutiveFailures === 1,
+  "1st failure does not jump straight to archived, even with a reachable archive (debounce still holds)",
+);
+const a2 = nextEvidenceStatus(a1, { reachable: false, contentMatches: null, archiveReachable: true }, now);
+assert(a2.status === "archived" && a2.consecutiveFailures === 2, "2nd consecutive failure with a reachable archive flips to archived, not unreachable");
 
 console.log("\nAll attefact pure-logic checks passed.");

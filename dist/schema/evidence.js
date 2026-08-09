@@ -1,4 +1,4 @@
-import { check, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, check, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { attefact } from "./_namespace.js";
 /**
@@ -12,12 +12,13 @@ import { attefact } from "./_namespace.js";
  * talk_external) populate `contentHash`, never `pinRef`. Exactly one
  * of the two is set, enforced below.
  *
- * `archiveUrl`/`archiveTier`: docs/decisions/0003 (Wayback Machine +
- * self-hosted archive fallback capture) is deferred. Every row ships
- * `archiveTier: "none"`, `archiveUrl: null` for now -- this is where
- * 0003 plugs in later, at the same authoring-time capture point as
- * `contentHash` below. Nothing else about this table changes when it
- * does.
+ * `archiveUrl`/`archiveTier`/`archiveVerified`: docs/decisions/0003's
+ * archive-fallback chain (Wayback Machine, falling back to
+ * self-hosted). `archiveVerified` is null until an archive attempt is
+ * made (i.e. while `archiveTier` is still `"none"`), then true/false.
+ * Both fields must stay visible rather than flattened into a single
+ * "archived: true/false" -- a self-hosted fallback is weaker
+ * corroboration than third-party archival per 0003's own wording.
  *
  * `supersededBy`: per 0002, a drifted/rotted source gets a NEW
  * evidence row, never an overwrite of this one.
@@ -31,6 +32,7 @@ export const evidence = attefact.table("evidence", {
     contentHash: text("content_hash"),
     archiveUrl: text("archive_url"),
     archiveTier: text("archive_tier").notNull().default("none"), // "none" | "third-party" | "self-hosted"
+    archiveVerified: boolean("archive_verified"),
     supersededBy: uuid("superseded_by").references(() => evidence.id),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }, (t) => [

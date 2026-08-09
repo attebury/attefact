@@ -1,6 +1,6 @@
 {
   "name": "@attebury/attefact",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Domain-agnostic evidence-pinning and rot-detection primitives. Schema + pure logic only -- no DB client, no framework, no consumer-specific fields. See docs/decisions/.",
   "license": "MIT",

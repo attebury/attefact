@@ -14,6 +14,10 @@ export function nextEvidenceStatus(previous, result, now) {
     if (consecutiveFailures < 2) {
         return { status: priorStatus, consecutiveFailures, lastCheckedAt: now };
     }
-    const status = result.reachable ? "drifted" : "unreachable";
+    const status = result.reachable
+        ? "drifted"
+        : result.archiveReachable
+            ? "archived"
+            : "unreachable";
     return { status, consecutiveFailures, lastCheckedAt: now };
 }

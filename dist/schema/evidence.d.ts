@@ -9,12 +9,13 @@
  * talk_external) populate `contentHash`, never `pinRef`. Exactly one
  * of the two is set, enforced below.
  *
- * `archiveUrl`/`archiveTier`: docs/decisions/0003 (Wayback Machine +
- * self-hosted archive fallback capture) is deferred. Every row ships
- * `archiveTier: "none"`, `archiveUrl: null` for now -- this is where
- * 0003 plugs in later, at the same authoring-time capture point as
- * `contentHash` below. Nothing else about this table changes when it
- * does.
+ * `archiveUrl`/`archiveTier`/`archiveVerified`: docs/decisions/0003's
+ * archive-fallback chain (Wayback Machine, falling back to
+ * self-hosted). `archiveVerified` is null until an archive attempt is
+ * made (i.e. while `archiveTier` is still `"none"`), then true/false.
+ * Both fields must stay visible rather than flattened into a single
+ * "archived: true/false" -- a self-hosted fallback is weaker
+ * corroboration than third-party archival per 0003's own wording.
  *
  * `supersededBy`: per 0002, a drifted/rotted source gets a NEW
  * evidence row, never an overwrite of this one.
@@ -155,6 +156,23 @@ export declare const evidence: import("drizzle-orm/pg-core").PgTableWithColumns<
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        archiveVerified: import("drizzle-orm/pg-core").PgColumn<{
+            name: "archive_verified";
+            tableName: "evidence";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;

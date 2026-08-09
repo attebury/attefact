@@ -1,13 +1,20 @@
 /**
- * docs/decisions/0004, 0005. The rot-detection state machine, minus
- * the `archived` state (depends on docs/decisions/0003's archive
- * fallback capture, deferred).
+ * docs/decisions/0004, 0005. The rot-detection state machine,
+ * including `archived` (docs/decisions/0003's archive fallback
+ * capture) -- origin dead, archive fallback still resolves.
  */
-export type EvidenceStatusValue = "unverified" | "live" | "drifted" | "unreachable";
+export type EvidenceStatusValue = "unverified" | "live" | "drifted" | "unreachable" | "archived";
 export type CheckResult = {
     reachable: boolean;
     /** null for pin kinds -- a commit SHA can't drift, only go unreachable. */
     contentMatches: boolean | null;
+    /**
+     * null when there's no archive to fall back to (archiveTier "none",
+     * or a pin-kind evidence row). Only consulted when the origin itself
+     * is unreachable -- drift means the origin is alive with different
+     * content, so archive fallback isn't the relevant signal there.
+     */
+    archiveReachable: boolean | null;
 };
 export type StatusRecord = {
     status: EvidenceStatusValue;

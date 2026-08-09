@@ -14,14 +14,18 @@ on top of it.
 
 ## Status
 
-v0.1.1. First real implementation: the evidence-kind taxonomy, the
-pin/snapshot capture primitives, and a basic rot-detection state
-machine (`unverified`/`live`/`drifted`/`unreachable`) with lazy
+v0.1.3. The evidence-kind taxonomy, the pin/snapshot capture
+primitives, and the full rot-detection state machine
+(`unverified`/`live`/`drifted`/`unreachable`/`archived`) with lazy
 TTL-bounded re-verification — schema (`src/schema/`) plus pure logic
-(`src/logic/`), no DB client, no framework. Archive-fallback capture
-(the `archived` state), attestation, root-of-trust gating, and
-identity-proof connectors are designed (see
-[`docs/decisions/`](docs/decisions/)) but not yet built.
+(`src/logic/`), no DB client, no framework. The archive-fallback
+*chain itself* (calling a third-party web archive, falling back to
+self-hosted capture) is business logic left to consumers per 0010 —
+this package provides the schema columns (`archiveUrl`/`archiveTier`/
+`archiveVerified`) and the state-machine branch that consumes their
+result. Attestation, root-of-trust gating, and identity-proof
+connectors are designed (see [`docs/decisions/`](docs/decisions/)) but
+not yet built.
 
 **`dist/` is committed on purpose**, not just gitignored build output.
 This package is installed by consumers as a git dependency (no npm
