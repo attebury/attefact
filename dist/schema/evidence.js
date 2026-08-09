@@ -1,6 +1,6 @@
 import { check, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { attefact } from "./_namespace";
+import { attefact } from "./_namespace.js";
 /**
  * docs/decisions/0001, 0002. Domain-agnostic on purpose (0010) -- no
  * claim/accomplishment FK here; consuming apps bind evidence to their

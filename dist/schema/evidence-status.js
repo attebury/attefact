@@ -1,6 +1,6 @@
 import { integer, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { attefact } from "./_namespace";
-import { evidence } from "./evidence";
+import { attefact } from "./_namespace.js";
+import { evidence } from "./evidence.js";
 /**
  * docs/decisions/0004, 0005. Insert-only, machine-written, kept
  * separate from `evidence`'s hand-authored content so a re-check can
