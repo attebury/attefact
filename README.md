@@ -14,8 +14,14 @@ on top of it.
 
 ## Status
 
-Design-stage. This repository currently contains scaffolding and design
-documentation only — no implementation exists yet. See
+v0.1.0. First real implementation: the evidence-kind taxonomy, the
+pin/snapshot capture primitives, and a basic rot-detection state
+machine (`unverified`/`live`/`drifted`/`unreachable`) with lazy
+TTL-bounded re-verification — schema (`src/schema/`) plus pure logic
+(`src/logic/`), no DB client, no framework. Archive-fallback capture
+(the `archived` state), attestation, root-of-trust gating, and
+identity-proof connectors are designed (see
+[`docs/decisions/`](docs/decisions/)) but not yet built. See
 [`docs/decisions/`](docs/decisions/) for the full design record.
 
 ## What it provides
