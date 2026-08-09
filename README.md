@@ -14,12 +14,12 @@ on top of it.
 
 ## Status
 
-v0.1.4. Evidence kinds: `repo`/`commit`/`merged_pr`/`deploy`/
-`talk_external`/`certification` (a third-party-issued credential,
-tier 1, snapshot-bound — reuses the existing snapshot machinery
-exactly, no new schema). `package_release`/`document`/
-`screen_recording` from 0001's full taxonomy still aren't wired up.
-The pin/snapshot capture
+v0.1.5. Evidence kinds: `repo`/`commit`/`merged_pr`/`deploy`/
+`talk_external`/`certification`/`document`/`screen_recording`.
+`document`/`screen_recording` are tier 3 and introduce a third
+binding, `upload` — a directly-uploaded file has no origin URL to fetch,
+unlike `pin`/`snapshot`. `package_release` (tier 2) is the one kind
+from 0001's full taxonomy still unwired. The pin/snapshot capture
 primitives, and the full rot-detection state machine
 (`unverified`/`live`/`drifted`/`unreachable`/`archived`) with lazy
 TTL-bounded re-verification — schema (`src/schema/`) plus pure logic

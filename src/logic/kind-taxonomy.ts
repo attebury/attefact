@@ -1,13 +1,13 @@
 /**
- * docs/decisions/0001. `certification` added (0029-ish -- see
- * attegrity's own ADR for the non-dev-professions pass this landed
- * in): a third-party-issued credential, tier 1 like merged_pr/
- * talk_external, snapshot-bound like deploy/talk_external -- a
- * verification/lookup URL is hashed and archived exactly like any
- * other snapshot, no new binding type or schema needed. The rest of
- * the broader taxonomy (package_release as tier 2; document,
- * screen_recording as tier 3 -- these need a real file-upload
- * mechanism, not a URL to fetch) still isn't wired up here.
+ * docs/decisions/0001. `document`/`screen_recording` added -- tier 3
+ * (self-hosted, weakest, matching the ADR), a genuinely new `upload`
+ * binding: neither `pin` (git-specific) nor `snapshot` (fetch-a-URL)
+ * fits a directly-uploaded file with no origin URL at all. See
+ * attegrity's own ADR for the file-upload pass this landed in for the
+ * full consumer-side design (a candidate-scoped R2 key, contentHash of
+ * the uploaded bytes, archiveTier set synchronously since the upload
+ * *is* the primary artifact, not a fallback). `package_release` (tier
+ * 2) is the one remaining unwired kind from 0001's full taxonomy.
  */
 export const EVIDENCE_KINDS = [
   "repo",
@@ -16,12 +16,14 @@ export const EVIDENCE_KINDS = [
   "deploy",
   "talk_external",
   "certification",
+  "document",
+  "screen_recording",
 ] as const;
 export type EvidenceKind = (typeof EVIDENCE_KINDS)[number];
 
 export type EvidenceTier = 1 | 2 | 3;
 export type EvidenceScope = "proves-claim" | "supports-skill";
-export type BindingType = "pin" | "snapshot";
+export type BindingType = "pin" | "snapshot" | "upload";
 
 const TIER_BY_KIND: Record<EvidenceKind, EvidenceTier> = {
   merged_pr: 1,
@@ -30,6 +32,8 @@ const TIER_BY_KIND: Record<EvidenceKind, EvidenceTier> = {
   repo: 2,
   commit: 2,
   deploy: 2,
+  document: 3,
+  screen_recording: 3,
 };
 
 const BINDING_BY_KIND: Record<EvidenceKind, BindingType> = {
@@ -39,6 +43,8 @@ const BINDING_BY_KIND: Record<EvidenceKind, BindingType> = {
   deploy: "snapshot",
   talk_external: "snapshot",
   certification: "snapshot",
+  document: "upload",
+  screen_recording: "upload",
 };
 
 export function tierOfKind(kind: EvidenceKind): EvidenceTier {

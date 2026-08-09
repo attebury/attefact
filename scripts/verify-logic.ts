@@ -28,6 +28,10 @@ assert(bindingOfKind("commit") === "pin", "commit is a pin kind");
 assert(bindingOfKind("deploy") === "snapshot", "deploy is a snapshot kind");
 assert(tierOfKind("certification") === 1, "certification is tier 1 (third-party issued)");
 assert(bindingOfKind("certification") === "snapshot", "certification is a snapshot kind, same as deploy/talk_external");
+assert(tierOfKind("document") === 3, "document is tier 3 (self-hosted, weakest)");
+assert(tierOfKind("screen_recording") === 3, "screen_recording is tier 3 (self-hosted, weakest)");
+assert(bindingOfKind("document") === "upload", "document is an upload kind, not pin or snapshot");
+assert(bindingOfKind("screen_recording") === "upload", "screen_recording is an upload kind, not pin or snapshot");
 
 assert(isCheckDue(null) === true, "never-checked is always due");
 const now = new Date("2026-08-09T12:00:00Z");
@@ -51,5 +55,13 @@ assert(
 );
 const a2 = nextEvidenceStatus(a1, { reachable: false, contentMatches: null, archiveReachable: true }, now);
 assert(a2.status === "archived" && a2.consecutiveFailures === 2, "2nd consecutive failure with a reachable archive flips to archived, not unreachable");
+
+// upload kinds (document/screen_recording): a reachable check with
+// contentMatches: null (nothing external to compare against, we own
+// the only copy) resolves straight to "live", same as a pin-kind
+// success -- no attefact logic change was needed for this, confirmed
+// here rather than just by reading the branch.
+const u1 = nextEvidenceStatus(null, { reachable: true, contentMatches: null, archiveReachable: null }, now);
+assert(u1.status === "live" && u1.consecutiveFailures === 0, "upload-kind reachable check resolves directly to live");
 
 console.log("\nAll attefact pure-logic checks passed.");
