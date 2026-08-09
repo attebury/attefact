@@ -14,15 +14,23 @@ on top of it.
 
 ## Status
 
-v0.1.0. First real implementation: the evidence-kind taxonomy, the
+v0.1.1. First real implementation: the evidence-kind taxonomy, the
 pin/snapshot capture primitives, and a basic rot-detection state
 machine (`unverified`/`live`/`drifted`/`unreachable`) with lazy
 TTL-bounded re-verification — schema (`src/schema/`) plus pure logic
 (`src/logic/`), no DB client, no framework. Archive-fallback capture
 (the `archived` state), attestation, root-of-trust gating, and
 identity-proof connectors are designed (see
-[`docs/decisions/`](docs/decisions/)) but not yet built. See
-[`docs/decisions/`](docs/decisions/) for the full design record.
+[`docs/decisions/`](docs/decisions/)) but not yet built.
+
+**`dist/` is committed on purpose**, not just gitignored build output.
+This package is installed by consumers as a git dependency (no npm
+registry), and Node refuses to type-strip `.ts` files that live under
+`node_modules` — a deliberate Node safety boundary, not a bug to route
+around with a flag. Shipping only `src/` broke `drizzle-kit generate`
+in the first consumer the moment it tried to load this package's
+schema. `src/` stays the source of truth; run `npm run build` and
+commit the result before tagging a release.
 
 ## What it provides
 

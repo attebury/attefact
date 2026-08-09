@@ -1,15 +1,18 @@
 {
   "name": "@attebury/attefact",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Domain-agnostic evidence-pinning and rot-detection primitives. Schema + pure logic only -- no DB client, no framework, no consumer-specific fields. See docs/decisions/.",
   "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./schema": "./src/schema/index.ts",
-    "./logic": "./src/logic/index.ts"
+    ".": "./dist/index.js",
+    "./schema": "./dist/schema/index.js",
+    "./logic": "./dist/logic/index.js"
   },
   "scripts": {
+    "build": "tsc",
     "typecheck": "tsc --noEmit",
     "verify": "tsx scripts/verify-logic.ts"
   },
