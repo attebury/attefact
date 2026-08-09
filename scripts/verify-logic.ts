@@ -26,6 +26,8 @@ assert(tierOfKind("merged_pr") === 1, "merged_pr is tier 1");
 assert(tierOfKind("repo") === 2, "repo is tier 2");
 assert(bindingOfKind("commit") === "pin", "commit is a pin kind");
 assert(bindingOfKind("deploy") === "snapshot", "deploy is a snapshot kind");
+assert(tierOfKind("certification") === 1, "certification is tier 1 (third-party issued)");
+assert(bindingOfKind("certification") === "snapshot", "certification is a snapshot kind, same as deploy/talk_external");
 
 assert(isCheckDue(null) === true, "never-checked is always due");
 const now = new Date("2026-08-09T12:00:00Z");
