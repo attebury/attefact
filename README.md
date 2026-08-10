@@ -14,12 +14,13 @@ on top of it.
 
 ## Status
 
-v0.1.5. Evidence kinds: `repo`/`commit`/`merged_pr`/`deploy`/
-`talk_external`/`certification`/`document`/`screen_recording`.
-`document`/`screen_recording` are tier 3 and introduce a third
-binding, `upload` — a directly-uploaded file has no origin URL to fetch,
-unlike `pin`/`snapshot`. `package_release` (tier 2) is the one kind
-from 0001's full taxonomy still unwired. The pin/snapshot capture
+v0.1.6. Evidence kinds: `repo`/`commit`/`merged_pr`/`deploy`/
+`talk_external`/`certification`/`package_release`/`document`/
+`screen_recording` — every kind [0001](docs/decisions/0001-evidence-kind-taxonomy.md)
+named is now wired up. Three bindings: `pin` (git-specific),
+`snapshot` (fetch a URL, hash the response — `deploy`/`talk_external`/
+`certification`/`package_release`), and `upload` (a directly-uploaded
+file with no origin URL — `document`/`screen_recording`). The pin/snapshot capture
 primitives, and the full rot-detection state machine
 (`unverified`/`live`/`drifted`/`unreachable`/`archived`) with lazy
 TTL-bounded re-verification — schema (`src/schema/`) plus pure logic

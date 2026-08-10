@@ -32,6 +32,8 @@ assert(tierOfKind("document") === 3, "document is tier 3 (self-hosted, weakest)"
 assert(tierOfKind("screen_recording") === 3, "screen_recording is tier 3 (self-hosted, weakest)");
 assert(bindingOfKind("document") === "upload", "document is an upload kind, not pin or snapshot");
 assert(bindingOfKind("screen_recording") === "upload", "screen_recording is an upload kind, not pin or snapshot");
+assert(tierOfKind("package_release") === 2, "package_release is tier 2 (public, self-published)");
+assert(bindingOfKind("package_release") === "snapshot", "package_release is a snapshot kind, same as deploy/certification");
 
 assert(isCheckDue(null) === true, "never-checked is always due");
 const now = new Date("2026-08-09T12:00:00Z");

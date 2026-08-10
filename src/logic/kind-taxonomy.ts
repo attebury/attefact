@@ -1,13 +1,19 @@
 /**
- * docs/decisions/0001. `document`/`screen_recording` added -- tier 3
- * (self-hosted, weakest, matching the ADR), a genuinely new `upload`
- * binding: neither `pin` (git-specific) nor `snapshot` (fetch-a-URL)
- * fits a directly-uploaded file with no origin URL at all. See
- * attegrity's own ADR for the file-upload pass this landed in for the
- * full consumer-side design (a candidate-scoped R2 key, contentHash of
- * the uploaded bytes, archiveTier set synchronously since the upload
- * *is* the primary artifact, not a fallback). `package_release` (tier
- * 2) is the one remaining unwired kind from 0001's full taxonomy.
+ * docs/decisions/0001. `package_release` added -- tier 2 ("public, but
+ * self-published," grouped with repo/commit/deploy), snapshot-bound:
+ * a package registry's release page or artifact URL is hashed and
+ * archived exactly like a `deploy`/`certification` source, no new
+ * binding or schema needed. This completes 0001's full 9-kind
+ * taxonomy -- every kind the ADR named is now wired up.
+ *
+ * `document`/`screen_recording` (tier 3, self-hosted, weakest) use a
+ * genuinely new `upload` binding: neither `pin` (git-specific) nor
+ * `snapshot` (fetch-a-URL) fits a directly-uploaded file with no
+ * origin URL at all. See attegrity's own ADR for the file-upload pass
+ * this landed in for the full consumer-side design (a candidate-scoped
+ * R2 key, contentHash of the uploaded bytes, archiveTier set
+ * synchronously since the upload *is* the primary artifact, not a
+ * fallback).
  */
 export const EVIDENCE_KINDS = [
   "repo",
@@ -16,6 +22,7 @@ export const EVIDENCE_KINDS = [
   "deploy",
   "talk_external",
   "certification",
+  "package_release",
   "document",
   "screen_recording",
 ] as const;
@@ -32,6 +39,7 @@ const TIER_BY_KIND: Record<EvidenceKind, EvidenceTier> = {
   repo: 2,
   commit: 2,
   deploy: 2,
+  package_release: 2,
   document: 3,
   screen_recording: 3,
 };
@@ -43,6 +51,7 @@ const BINDING_BY_KIND: Record<EvidenceKind, BindingType> = {
   deploy: "snapshot",
   talk_external: "snapshot",
   certification: "snapshot",
+  package_release: "snapshot",
   document: "upload",
   screen_recording: "upload",
 };
