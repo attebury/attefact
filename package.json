@@ -12,16 +12,17 @@
     "./logic": "./dist/logic/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "verify": "tsx scripts/verify-logic.ts"
+    "test": "vitest run"
   },
   "dependencies": {
     "drizzle-orm": "0.36.4"
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
+    "@types/node": "^22.10.5",
     "tsx": "^4.19.2",
-    "@types/node": "^22.10.5"
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.10"
   }
 }
