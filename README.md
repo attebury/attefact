@@ -44,23 +44,47 @@ commit the result before tagging a release.
 
 ## What it provides
 
+Split below into what's actually implemented in `src/` today versus
+what's designed (see [`docs/decisions/`](docs/decisions/)) but not yet
+built — found conflated into one undifferentiated list in an adversarial
+review, which for a trust/verification library is a dangerous thing to
+get wrong: a reader skimming the old list could reasonably believe
+security-critical gating was implemented when it wasn't.
+
+**Built:**
+
 - An evidence `kind` taxonomy, tiered by independence (third-party record,
-  public self-published artifact, self-hosted document).
-- Content-addressed `pin` and hash+archive `snapshot` primitives for
-  binding a claim to immutable evidence.
-- An archive-fallback capture chain for evidence sources that might go
-  away.
+  public self-published artifact, self-hosted document) — `src/logic/kind-taxonomy.ts`.
+- Content-addressed `pin` parsing for binding a claim to immutable
+  evidence — `src/logic/pin-parse.ts`. Parsing only, no network I/O;
+  the actual fetch is a consumer's job (see below).
 - A rot-detection state machine that tracks whether evidence is still
   live, has drifted, has become unreachable, or is only reachable via
-  archive.
-- Lazy, TTL-bounded re-verification scheduling.
+  archive, plus lazy TTL-bounded re-verification scheduling —
+  `src/logic/state-machine.ts`, `src/logic/ttl.ts`.
+- The `evidence`/`evidence_status` schema (`src/schema/`) those
+  primitives run against.
+
+**Not this package's job, by design** (schema/hooks provided, logic is
+the consumer's):
+
+- The archive-fallback capture chain itself (calling a third-party web
+  archive, falling back to self-hosted capture) — which provider, which
+  auth, which rate limits is application-specific (0010). This package
+  provides the schema columns (`archiveUrl`/`archiveTier`/
+  `archiveVerified`) and the state-machine branch that consumes the
+  result, not the fetch itself.
+
+**Designed, not yet implemented** — real ADRs exist, no code does yet:
+
 - A person-in-the-loop attestation request/response primitive, for claims
   that don't leave a public artifact trail.
 - Root-of-trust gating logic for attestation and identity.
 - Identity-proof connectors (linked accounts, KYC providers, workplace-
   domain proof).
-- A reusable, append-only, immutable, revocable event-ledger primitive
-  underlying all of the above.
+- A reusable, append-only, immutable, revocable event-ledger primitive.
+  (Today, the insert-only contract on `evidence`/`evidence_status` is
+  comments-only — no database-level enforcement exists yet either.)
 
 ## What it does not provide
 
