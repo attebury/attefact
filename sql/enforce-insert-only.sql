@@ -1,8 +1,8 @@
 -- Database-level enforcement for evidence/evidence_status's insert-only
--- contract -- found missing in an adversarial review (Gitea issue #3):
--- the "nothing is ever mutated" guarantee was comments-only in the
--- schema files, with nothing stopping a raw UPDATE/DELETE from breaking
--- the tamper-evidence property the whole design depends on.
+-- contract -- found missing in an adversarial review: the "nothing is
+-- ever mutated" guarantee was comments-only in the schema files, with
+-- nothing stopping a raw UPDATE/DELETE from breaking the tamper-evidence
+-- property the whole design depends on.
 --
 -- Attefact ships schema definitions only (src/schema/), no migration
 -- tooling of its own -- this repo has no migrations/ directory, and a
@@ -10,9 +10,7 @@
 -- applies the actual migration against the one real database that uses
 -- these tables. This file is the canonical copy of that enforcement SQL;
 -- apply it as a custom migration alongside whichever migration first
--- creates the `evidence`/`evidence_status` tables. See
--- ../../attegrity/db/migrations/0019_attefact_insert_only_triggers.sql
--- for where the current sole consumer actually applied it.
+-- creates the `evidence`/`evidence_status` tables.
 
 -- evidence_status is fully insert-only, no exceptions -- every re-check
 -- is a new row, never an update of the previous one (per its own

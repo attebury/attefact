@@ -17,9 +17,9 @@
  * "archived" -- kept in sync by hand with src/logic/state-machine.ts's
  * EvidenceStatusValue type. This comment previously listed only four of
  * the five values (missing "archived"), found out of sync with the
- * actual state machine in an adversarial review (Gitea issue #5) --
- * the CHECK constraint below is a second guard against exactly this
- * kind of drift, not just this comment being corrected once.
+ * actual state machine in an adversarial review -- the CHECK constraint
+ * below is a second guard against exactly this kind of drift, not just
+ * this comment being corrected once.
  */
 export declare const evidenceStatus: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "evidence_status";

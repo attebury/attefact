@@ -9,11 +9,11 @@
  * `document`/`screen_recording` (tier 3, self-hosted, weakest) use a
  * genuinely new `upload` binding: neither `pin` (git-specific) nor
  * `snapshot` (fetch-a-URL) fits a directly-uploaded file with no
- * origin URL at all. See attegrity's own ADR for the file-upload pass
- * this landed in for the full consumer-side design (a candidate-scoped
- * R2 key, contentHash of the uploaded bytes, archiveTier set
- * synchronously since the upload *is* the primary artifact, not a
- * fallback).
+ * origin URL at all. The consumer-side design (an owner-scoped storage
+ * key, contentHash of the uploaded bytes, archiveTier set synchronously
+ * since the upload *is* the primary artifact, not a fallback) lives in
+ * whichever application integrates this binding -- attefact only
+ * defines the taxonomy, not how a consumer stores the file.
  */
 export const EVIDENCE_KINDS = [
     "repo",

@@ -41,7 +41,7 @@ export const evidence = attefact.table(
   },
   (t) => [
     check("evidence_binding_shape", sql`(${t.pinRef} is not null) <> (${t.contentHash} is not null)`),
-    // Found missing in an adversarial review (Gitea issue #4): `kind`/
+    // Found missing in an adversarial review: `kind`/
     // `scope`/`archiveTier` were plain text with valid values documented
     // only in comments -- a bad insert (app bug, manual SQL, migration
     // mistake) could write an out-of-taxonomy value with nothing to
