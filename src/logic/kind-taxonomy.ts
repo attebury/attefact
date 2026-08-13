@@ -1,10 +1,8 @@
 /**
- * docs/decisions/0001. `package_release` added -- tier 2 ("public, but
- * self-published," grouped with repo/commit/deploy), snapshot-bound:
- * a package registry's release page or artifact URL is hashed and
- * archived exactly like a `deploy`/`certification` source, no new
- * binding or schema needed. This completes 0001's full 9-kind
- * taxonomy -- every kind the ADR named is now wired up.
+ * `package_release` is tier 2 ("public, but self-published," grouped
+ * with repo/commit/deploy), snapshot-bound: a package registry's
+ * release page or artifact URL is hashed and archived exactly like a
+ * `deploy`/`certification` source, no new binding or schema needed.
  *
  * `document`/`screen_recording` (tier 3, self-hosted, weakest) use a
  * genuinely new `upload` binding: neither `pin` (git-specific) nor

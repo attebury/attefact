@@ -1,24 +1,27 @@
 /**
- * docs/decisions/0001, 0002. Domain-agnostic on purpose (0010) -- no
- * claim/accomplishment FK here; consuming apps bind evidence to their
- * own subjects in their own tables, with a real FK back to this
- * table's `id`.
+ * Domain-agnostic on purpose -- no claim/accomplishment FK here;
+ * consuming apps bind evidence to their own subjects in their own
+ * tables, with a real FK back to this table's `id`.
  *
  * `pin` kinds (repo/commit/merged_pr) populate `pinRef` (an immutable
  * commit SHA/tag), never `contentHash`. `snapshot` kinds (deploy/
  * talk_external) populate `contentHash`, never `pinRef`. Exactly one
  * of the two is set, enforced below.
  *
- * `archiveUrl`/`archiveTier`/`archiveVerified`: docs/decisions/0003's
- * archive-fallback chain (Wayback Machine, falling back to
- * self-hosted). `archiveVerified` is null until an archive attempt is
+ * `archiveUrl`/`archiveTier`/`archiveVerified`: an archive-fallback
+ * chain (Wayback Machine, falling back to self-hosted).
+ * `archiveVerified` is null until an archive attempt is
  * made (i.e. while `archiveTier` is still `"none"`), then true/false.
  * Both fields must stay visible rather than flattened into a single
  * "archived: true/false" -- a self-hosted fallback is weaker
- * corroboration than third-party archival per 0003's own wording.
+ * corroboration than third-party archival.
  *
- * `supersededBy`: per 0002, a drifted/rotted source gets a NEW
- * evidence row, never an overwrite of this one.
+ * `supersededBy`: a drifted/rotted source gets a NEW evidence row,
+ * never an overwrite of this one.
+ *
+ * `id` is generated app-side (`generateId()`, shared across every
+ * dialect's schema module) rather than via a DB-native default -- not
+ * every database has one (SQLite has none at all).
  */
 export declare const evidence: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "evidence";
@@ -35,7 +38,7 @@ export declare const evidence: import("drizzle-orm/pg-core").PgTableWithColumns<
             hasDefault: true;
             isPrimaryKey: true;
             isAutoincrement: false;
-            hasRuntimeDefault: false;
+            hasRuntimeDefault: true;
             enumValues: undefined;
             baseColumn: never;
             identity: undefined;

@@ -1,8 +1,9 @@
--- Database-level enforcement for evidence/evidence_status's insert-only
+-- Postgres enforcement for evidence/evidence_status's insert-only
 -- contract -- found missing in an adversarial review: the "nothing is
 -- ever mutated" guarantee was comments-only in the schema files, with
 -- nothing stopping a raw UPDATE/DELETE from breaking the tamper-evidence
--- property the whole design depends on.
+-- property the whole design depends on. See enforce-insert-only.sqlite.sql
+-- for the same guarantee against SQLite's own trigger syntax.
 --
 -- Attefact ships schema definitions only (src/schema/), no migration
 -- tooling of its own -- this repo has no migrations/ directory, and a
@@ -28,7 +29,7 @@ CREATE TRIGGER evidence_status_prevent_mutation
 -- evidence has exactly one deliberate exception (a real, narrow one, not
 -- a loophole): a consumer's archive-fallback capture task writes
 -- archive_url/archive_tier/archive_verified once, at authoring time,
--- when the async archive attempt finishes (0003). Every other column
+-- when the async archive attempt finishes. Every other column
 -- (kind, scope, source_url, pin_ref, content_hash, superseded_by,
 -- created_at) is the hand-authored, tamper-evident content this table
 -- exists to protect, and DELETE is never valid at all -- a drifted or

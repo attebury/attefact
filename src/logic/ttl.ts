@@ -1,8 +1,7 @@
 /**
- * docs/decisions/0005. No fixed-timer polling -- a consuming app calls
- * this at the point evidence is actually surfaced to decide whether a
- * lazy re-check is due, bounded by a TTL rather than checked on every
- * view.
+ * No fixed-timer polling -- a consuming app calls this at the point
+ * evidence is actually surfaced to decide whether a lazy re-check is
+ * due, bounded by a TTL rather than checked on every view.
  */
 export const DEFAULT_TTL_MS = 24 * 60 * 60 * 1000;
 

@@ -1,7 +1,7 @@
 /**
- * docs/decisions/0004, 0005. The rot-detection state machine,
- * including `archived` (docs/decisions/0003's archive fallback
- * capture) -- origin dead, archive fallback still resolves.
+ * The rot-detection state machine, including `archived` (the archive
+ * fallback capture case) -- origin dead, archive fallback still
+ * resolves.
  */
 export type EvidenceStatusValue = "unverified" | "live" | "drifted" | "unreachable" | "archived";
 export type CheckResult = {

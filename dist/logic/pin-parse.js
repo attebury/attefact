@@ -1,8 +1,8 @@
 /**
- * docs/decisions/0002. Parsing only -- no network I/O. Fetching a URL
- * to verify it, or calling a hosting provider's API, is the consuming
- * application's business logic (which provider, which auth, which
- * rate limits), not this library's concern (docs/decisions/0010).
+ * Parsing only -- no network I/O. Fetching a URL to verify it, or
+ * calling a hosting provider's API, is the consuming application's
+ * business logic (which provider, which auth, which rate limits), not
+ * this library's concern.
  *
  * GitHub-only at this pass -- a real limitation, not an oversight.
  */

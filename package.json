@@ -1,14 +1,15 @@
 {
   "name": "@attebury/attefact",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "type": "module",
-  "description": "Domain-agnostic evidence-pinning and rot-detection primitives. Schema + pure logic only -- no DB client, no framework, no consumer-specific fields. See docs/decisions/.",
+  "description": "Domain-agnostic evidence-pinning and rot-detection primitives. Schema (Postgres and SQLite) + pure logic only -- no DB client, no framework, no consumer-specific fields.",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./schema": "./dist/schema/index.js",
+    "./schema/pg": "./dist/schema/pg/index.js",
+    "./schema/sqlite": "./dist/schema/sqlite/index.js",
     "./logic": "./dist/logic/index.js"
   },
   "scripts": {
@@ -17,9 +18,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "drizzle-orm": "0.36.4"
+    "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.5",
     "@types/node": "^22.10.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
